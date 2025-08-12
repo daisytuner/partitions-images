@@ -21,7 +21,6 @@ RUN wget https://github.com/icl-utk-edu/papi/releases/download/papi-7-2-0-t/papi
     && make install \
     && cd .. \
     && rm -rf papi-7.2.0 papi-7.2.0.tar.gz
-ENV __DAISY_PAPI_VERSION=0x07020000
 
 ### PySpy ###
 RUN python3 -m pip install py-spy --break-system-packages
@@ -32,3 +31,4 @@ FROM scratch
 copy --from=build / /
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV __DAISY_PAPI_VERSION=0x07020000
