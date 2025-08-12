@@ -10,9 +10,7 @@ RUN apt-get install -y wget curl apt-utils && \
     apt-get install -y gcc g++ gfortran libblas-dev liblapack-dev && \
     apt-get install -y python3 python3-dev python3-pip python3-venv
 
-### Profiling Tools ###
-
-# PAPI
+### PAPI ###
 RUN wget https://github.com/icl-utk-edu/papi/releases/download/papi-7-2-0-t/papi-7.2.0.tar.gz \
     && tar -xzf papi-7.2.0.tar.gz \
     && cd papi-7.2.0/src \
@@ -21,9 +19,6 @@ RUN wget https://github.com/icl-utk-edu/papi/releases/download/papi-7-2-0-t/papi
     && make install \
     && cd .. \
     && rm -rf papi-7.2.0 papi-7.2.0.tar.gz
-
-### PySpy ###
-RUN python3 -m pip install py-spy --break-system-packages
 
 ### Final Image (Squash all layers) ###
 FROM scratch

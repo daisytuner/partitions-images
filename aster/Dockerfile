@@ -19,9 +19,7 @@ RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/sbs
 ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
-### Profiling Tools ###
-
-# PAPI
+### PAPI ###
 RUN wget https://github.com/icl-utk-edu/papi/releases/download/papi-7-2-0-t/papi-7.2.0.tar.gz \
     && tar -xzf papi-7.2.0.tar.gz \
     && cd papi-7.2.0/src \
@@ -31,9 +29,6 @@ RUN wget https://github.com/icl-utk-edu/papi/releases/download/papi-7-2-0-t/papi
     && cd .. \
     && rm -rf papi-7.2.0 papi-7.2.0.tar.gz
 
-### PySpy ###
-RUN python3 -m pip install py-spy --break-system-packages
-
 ### Final Image (Squash all layers) ###
 FROM scratch
 
@@ -41,9 +36,9 @@ COPY --from=build / /
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-### PAPI ###
-ENV __DAISY_PAPI_VERSION=0x07020000
-
 ### CUDA ###
 ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+### PAPI ###
+ENV __DAISY_PAPI_VERSION=0x07020000
