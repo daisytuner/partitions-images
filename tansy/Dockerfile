@@ -12,6 +12,10 @@ RUN apt-get install -y wget curl apt-utils && \
 
 ### Profiling Tools ###
 
+# Nsight Compute
+ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
 # PAPI
 RUN wget https://github.com/icl-utk-edu/papi/releases/download/papi-7-2-0-t/papi-7.2.0.tar.gz \
     && tar -xzf papi-7.2.0.tar.gz \
