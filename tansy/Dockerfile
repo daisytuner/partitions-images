@@ -25,7 +25,3 @@ ENV __DAISY_PAPI_VERSION=0x07020000
 
 ### PySpy ###
 RUN python3 -m pip install py-spy
-
-### Nsight Systems (Pre-Defined Mount Path) ###
-ENV PATH=/usr/local/nsight-systems/bin${PATH:+:${PATH}}
-ENV PATH=/usr/local/nsight-compute${PATH:+:${PATH}}

@@ -15,10 +15,11 @@ RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86
     && dpkg -i cuda-keyring_1.1-1_all.deb \
     && rm cuda-keyring_1.1-1_all.deb \
     && apt-get update \
-    && apt-get install -y cuda-toolkit-12-9
-
-ENV PATH=/usr/local/cuda-12.9/bin${PATH:+:${PATH}}
-ENV LD_LIBRARY_PATH=/usr/local/cuda-12.9/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+    && apt-get install -y cuda-toolkit-12-5
+ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+ENV CPATH=/usr/local/cuda/targets/x86_64-linux/include${CPATH:+:${CPATH}}
+ENV LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
 ### Profiling Tools ###
 
@@ -35,14 +36,18 @@ RUN wget https://github.com/icl-utk-edu/papi/releases/download/papi-7-2-0-t/papi
 ### PySpy ###
 RUN python3 -m pip install py-spy --break-system-packages
 
-### Nsight Systems (Pre-Defined Mount Path) ###
-ENV PATH=/usr/local/nsight-systems/bin${PATH:+:${PATH}}
-ENV PATH=/usr/local/nsight-compute${PATH:+:${PATH}}
-
 ### Final Image (Squash all layers) ###
 FROM scratch
 
 COPY --from=build / /
 
 ENV DEBIAN_FRONTEND=noninteractive
+
+### PAPI ###
 ENV __DAISY_PAPI_VERSION=0x07020000
+
+### CUDA ###
+ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+ENV CPATH=/usr/local/cuda/targets/x86_64-linux/include${CPATH:+:${CPATH}}
+ENV LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}

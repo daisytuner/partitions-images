@@ -31,4 +31,6 @@ FROM scratch
 copy --from=build / /
 
 ENV DEBIAN_FRONTEND=noninteractive
+
+### PAPI ###
 ENV __DAISY_PAPI_VERSION=0x07020000
