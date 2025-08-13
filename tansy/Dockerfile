@@ -5,10 +5,18 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install basic dependencies
 RUN apt-get update
 
-RUN apt-get install -y wget curl unzip apt-utils && \
+RUN apt-get install -y wget curl unzip apt-utils software-properties-common && \
     apt-get install -y build-essential rustc cmake ninja-build ccache pkg-config && \
     apt-get install -y gcc g++ gfortran libblas-dev liblapack-dev && \
     apt-get install -y python3 python3-dev python3-pip python3-venv
+
+### LLVM 19 ###
+RUN apt-get update
+RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
+    && add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-19 main" \
+    && add-apt-repository "deb-src http://apt.llvm.org/jammy/ llvm-toolchain-jammy-19 main" \
+    && apt-get update \
+    && apt-get install -y llvm-19 clang-19 lld-19 libomp-19-dev clang-format-19
 
 ### CUDA ###
 ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
