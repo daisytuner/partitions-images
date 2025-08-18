@@ -37,11 +37,14 @@ RUN wget https://github.com/icl-utk-edu/papi/releases/download/papi-7-2-0-t/papi
     && cd .. \
     && rm -rf papi-7.2.0 papi-7.2.0.tar.gz
 
-### LibTorch ###
-RUN wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.7.1%2Bcpu.zip \
-    && unzip libtorch-cxx11-abi-shared-with-deps-2.7.1+cpu.zip \
-    && rm libtorch-cxx11-abi-shared-with-deps-2.7.1+cpu.zip \
-    && mv libtorch /usr/local/libtorch
+# Libtorch from pytorch install
+RUN apt-get install -y python3-venv \
+    && python3 -m venv venv \
+    && venv/bin/pip install torch==2.7.1 --index-url https://download.pytorch.org/whl/cpu \
+    && mkdir -p /usr/local/libtorch \
+    && cp -r venv/lib/python3.12/site-packages/torch/lib venv/lib/python3.12/site-packages/torch/share venv/lib/python3.12/site-packages/torch/include /usr/local/libtorch \
+    && cp -r venv/lib/python3.12/site-packages/torch.libs/* /usr/local/libtorch/lib \
+    && rm -rf venv
 
 ### Final Image (Squash all layers) ###
 FROM scratch
