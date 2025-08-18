@@ -38,8 +38,8 @@ RUN apt-get install -y python3-venv \
     && python3 -m venv venv \
     && venv/bin/pip install torch==2.7.1 --index-url https://download.pytorch.org/whl/cpu \
     && mkdir -p /usr/local/libtorch \
-    && cp -r venv/lib/python3.12/site-packages/torch/lib venv/lib/python3.12/site-packages/torch/share venv/lib/python3.12/site-packages/torch/include /usr/local/libtorch \
-    && cp -r venv/lib/python3.12/site-packages/torch.libs/* /usr/local/libtorch/lib \
+    && cp -r venv/lib/python3.10/site-packages/torch/lib venv/lib/python3.10/site-packages/torch/share venv/lib/python3.10/site-packages/torch/include /usr/local/libtorch \
+    && cp -r venv/lib/python3.10/site-packages/torch.libs/* /usr/local/libtorch/lib \
     && rm -rf venv
-    
+
 ENV LD_LIBRARY_PATH=/usr/local/libtorch/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
