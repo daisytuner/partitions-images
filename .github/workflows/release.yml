@@ -55,16 +55,8 @@ jobs:
 
   build-image-amd64:
     runs-on: build-amd64-big
-
-    strategy:
-      matrix:
-        include:
-          - partition: ./zinnia
-            image: daisytuner/zinnia
-            platform: linux/amd64
-          - partition: ./chamomile
-            image: daisytuner/chamomile
-            platform: linux/amd64
+    env:
+      TT_METAL_VERSION: "v0.63.0"
 
     steps:
       - name: Checkout Repository
@@ -86,9 +78,25 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ${{ matrix.partition }}
-          platforms: ${{ matrix.platform }}
+          context: ./x64-base
+          platforms: linux/amd64
           push: true
           tags: |
-            ${{ matrix.image }}:${{ env.SHORT_SHA }}
-            ${{ matrix.image }}:latest
+            daisytuner/x64-base:${{ env.SHORT_SHA }}
+            daisytuner/x64-base:latest
+            daisytuner/chamomile:${{ env.SHORT_SHA }}
+            daisytuner/chamomile:latest
+            daisytuner/zinnia:${{ env.SHORT_SHA }}
+            daisytuner/zinnia:latest
+
+      - name: Build and Push Tenstorrent Derivative Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./x64-tenstorrent
+          platforms: linux/amd64
+          push: true
+          build-args: |
+            TT_METAL_VERSION=${{ env.TT_METAL_VERSION }}
+          tags: |
+            daisytuner/x64-tenstorrent:${{ env.TT_METAL_VERSION }}-${{ env.SHORT_SHA }}
+            daisytuner/x64-tenstorrent:${{ env.TT_METAL_VERSION }}-latest
