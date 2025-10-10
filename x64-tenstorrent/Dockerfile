@@ -2,6 +2,9 @@ FROM daisytuner/x64-base:latest AS build
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install boost
+RUN apt-get install -y libboost-all-dev
+
 # Install TT_Metal
 ARG TT_METAL_VERSION
 RUN mkdir -p /tenstorrent && cd /tenstorrent && \
