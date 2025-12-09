@@ -7,7 +7,7 @@ RUN apt-get update
 
 RUN apt-get install -y wget curl unzip apt-utils software-properties-common && \
     apt-get install -y build-essential rustc cmake ninja-build ccache pkg-config && \
-    apt-get install -y gcc g++ gfortran libblas-dev liblapack-dev && \
+    apt-get install -y gcc g++ gfortran libblas-dev libcurl4-openssl-dev iblapack-dev && \
     apt-get install -y python3 python3-dev python3-pip python3-venv
 
 ### LLVM 19 ###
