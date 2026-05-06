@@ -31,12 +31,11 @@ ENV LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib${LD_LIBRARY_PATH:+:
 
 ### ROCM ###
 RUN wget https://repo.radeon.com/amdgpu-install/6.4.3/ubuntu/noble/amdgpu-install_6.4.60403-1_all.deb \
-    && apt install ./amdgpu-install_6.4.60403-1_all.deb \
+    && apt install -y ./amdgpu-install_6.4.60403-1_all.deb \
     && apt update \
-    && apt-get update \
-    && apt install python3-setuptools python3-wheel \
+    && apt install -y python3-setuptools python3-wheel \
     && usermod -a -G render,video $LOGNAME \
-    && apt install rocm
+    && apt install -y rocm
 
 ### PAPI ###
 RUN wget https://github.com/icl-utk-edu/papi/releases/download/papi-7-2-0-t/papi-7.2.0.tar.gz \
