@@ -42,7 +42,7 @@ RUN wget https://repo.radeon.com/amdgpu-install/6.4.3/ubuntu/noble/amdgpu-instal
 RUN wget https://github.com/icl-utk-edu/papi/releases/download/papi-7-2-0-t/papi-7.2.0.tar.gz \
     && tar -xzf papi-7.2.0.tar.gz \
     && cd papi-7.2.0/src \
-    && ./configure --with-components="cuda nvml" --with-tests=no \
+    && ./configure --with-components="cuda nvml rocm" --with-tests=no \
     && make -j$(nproc) \
     && make install \
     && cd .. \
