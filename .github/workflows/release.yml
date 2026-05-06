@@ -86,6 +86,14 @@ jobs:
             daisytuner/x64-base:latest
             daisytuner/chamomile:${{ env.SHORT_SHA }}
             daisytuner/chamomile:latest
+      
+      - name: Build and Push Docker Image zinnia
+        uses: docker/build-push-action@v5
+        with:
+          context: ./zinnia
+          platforms: linux/amd64
+          push: true
+          tags: |
             daisytuner/zinnia:${{ env.SHORT_SHA }}
             daisytuner/zinnia:latest
 
