@@ -34,7 +34,6 @@ RUN wget https://repo.radeon.com/amdgpu-install/6.4.3/ubuntu/noble/amdgpu-instal
     && apt install -y ./amdgpu-install_6.4.60403-1_all.deb \
     && apt update \
     && apt install -y python3-setuptools python3-wheel \
-    && usermod -a -G render,video $LOGNAME \
     && apt install -y rocm
 
 ### PAPI ###
