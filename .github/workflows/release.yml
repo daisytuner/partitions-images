@@ -17,13 +17,13 @@ jobs:
       matrix:
         include:
           - partition: ./bellis
-            image: daisytuner/bellis
+            image: daisytuner/bellis-llvm21
             platform: linux/arm64
           - partition: ./tansy
-            image: daisytuner/tansy
+            image: daisytuner/tansy-llvm21
             platform: linux/arm64
           - partition: ./aster
-            image: daisytuner/aster
+            image: daisytuner/aster-llvm21
             platform: linux/arm64
 
     steps:
@@ -49,6 +49,8 @@ jobs:
           context: ${{ matrix.partition }}
           platforms: ${{ matrix.platform }}
           push: true
+          build-args: |
+            LLVM_VERSION=21
           tags: |
             ${{ matrix.image }}:${{ env.SHORT_SHA }}
             ${{ matrix.image }}:latest
@@ -81,11 +83,11 @@ jobs:
           context: ./x64-base
           platforms: linux/amd64
           push: true
+          build-args: |
+            LLVM_VERSION=21
           tags: |
-            daisytuner/x64-base:${{ env.SHORT_SHA }}
-            daisytuner/x64-base:latest
-            daisytuner/chamomile:${{ env.SHORT_SHA }}
-            daisytuner/chamomile:latest
+            daisytuner/x64-base-llvm21:${{ env.SHORT_SHA }}
+            daisytuner/x64-base-llvm21:latest
       
       - name: Build and Push Docker Image zinnia
         uses: docker/build-push-action@v5
@@ -93,9 +95,11 @@ jobs:
           context: ./zinnia
           platforms: linux/amd64
           push: true
+          build-args: |
+            LLVM_VERSION=21
           tags: |
-            daisytuner/zinnia:${{ env.SHORT_SHA }}
-            daisytuner/zinnia:latest
+            daisytuner/zinnia-llvm21:${{ env.SHORT_SHA }}
+            daisytuner/zinnia-llvm21:latest
 
       - name: Build and Push Tenstorrent Derivative Image
         uses: docker/build-push-action@v5
@@ -105,6 +109,8 @@ jobs:
           push: true
           build-args: |
             TT_METAL_VERSION=${{ env.TT_METAL_VERSION }}
+            BASE_IMAGE=daisytuner/x64-base-llvm21
+            BASE_TAG=latest
           tags: |
-            daisytuner/x64-tenstorrent:${{ env.TT_METAL_VERSION }}-${{ env.SHORT_SHA }}
-            daisytuner/x64-tenstorrent:${{ env.TT_METAL_VERSION }}-latest
+            daisytuner/x64-tenstorrent-llvm21:${{ env.TT_METAL_VERSION }}-${{ env.SHORT_SHA }}
+            daisytuner/x64-tenstorrent-llvm21:${{ env.TT_METAL_VERSION }}-latest

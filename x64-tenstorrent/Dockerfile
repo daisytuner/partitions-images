@@ -1,4 +1,6 @@
-FROM daisytuner/x64-base:latest AS build
+ARG BASE_IMAGE=daisytuner/x64-base-llvm21
+ARG BASE_TAG=latest
+FROM ${BASE_IMAGE}:${BASE_TAG} AS build
 
 ENV DEBIAN_FRONTEND=noninteractive
 

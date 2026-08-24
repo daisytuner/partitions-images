@@ -1,5 +1,6 @@
 FROM nvcr.io/nvidia/l4t-jetpack:r36.4.0
 
+ARG LLVM_VERSION=21
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install basic dependencies
@@ -10,13 +11,12 @@ RUN apt-get install -y wget curl unzip apt-utils software-properties-common && \
     apt-get install -y gcc g++ gfortran libblas-dev libcurl4-gnutls-dev liblapack-dev && \
     apt-get install -y python3 python3-dev python3-pip python3-venv
 
-### LLVM 19 ###
-RUN apt-get update
+### LLVM ###
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
-    && add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-19 main" \
-    && add-apt-repository "deb-src http://apt.llvm.org/jammy/ llvm-toolchain-jammy-19 main" \
+    && add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-${LLVM_VERSION} main" \
+    && add-apt-repository "deb-src http://apt.llvm.org/jammy/ llvm-toolchain-jammy-${LLVM_VERSION} main" \
     && apt-get update \
-    && apt-get install -y llvm-19 clang-19 lld-19 libomp-19-dev clang-format-19
+    && apt-get install -y llvm-${LLVM_VERSION} clang-${LLVM_VERSION} lld-${LLVM_VERSION} libomp-${LLVM_VERSION}-dev clang-format-${LLVM_VERSION}
 
 ### CUDA ###
 ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
