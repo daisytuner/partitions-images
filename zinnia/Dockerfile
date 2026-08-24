@@ -1,5 +1,6 @@
 FROM ubuntu:24.04 AS build
 
+ARG LLVM_VERSION=21
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install basic dependencies
@@ -10,28 +11,27 @@ RUN apt-get install -y wget curl unzip apt-utils software-properties-common && \
     apt-get install -y gcc g++ gfortran libblas-dev libcurl4-gnutls-dev liblapack-dev && \
     apt-get install -y python3 python3-dev python3-pip python3-venv
 
-### LLVM 19 ###
-RUN apt-get update
+### LLVM  ###
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
-    && add-apt-repository "deb http://apt.llvm.org/noble/ llvm-toolchain-noble-19 main" \
-    && add-apt-repository "deb-src http://apt.llvm.org/noble/ llvm-toolchain-noble-19 main" \
+    && add-apt-repository "deb http://apt.llvm.org/noble/ llvm-toolchain-noble-${LLVM_VERSION} main" \
+    && add-apt-repository "deb-src http://apt.llvm.org/noble/ llvm-toolchain-noble-${LLVM_VERSION} main" \
     && apt-get update \
-    && apt-get install -y llvm-19 clang-19 lld-19 libomp-19-dev clang-format-19
+    && apt-get install -y llvm-${LLVM_VERSION} clang-${LLVM_VERSION} lld-${LLVM_VERSION} libomp-${LLVM_VERSION}-dev clang-format-${LLVM_VERSION}
 
 ### CUDA ###
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb \
     && dpkg -i cuda-keyring_1.1-1_all.deb \
     && rm cuda-keyring_1.1-1_all.deb \
     && apt-get update \
-    && apt-get install -y cuda-toolkit-12-5
+    && apt-get install -y cuda-toolkit-12-8
 ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 ENV CPATH=/usr/local/cuda/targets/x86_64-linux/include${CPATH:+:${CPATH}}
 ENV LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
-### ROCM ###
-RUN wget https://repo.radeon.com/amdgpu-install/6.4.3/ubuntu/noble/amdgpu-install_6.4.60403-1_all.deb \
-    && apt install -y ./amdgpu-install_6.4.60403-1_all.deb \
+# ROCM 7.2
+RUN wget https://repo.radeon.com/amdgpu-install/7.2.3/ubuntu/noble/amdgpu-install_7.2.3.70203-1_all.deb \
+    && apt install -y ./amdgpu-install_7.2.3.70203-1_all.deb \
     && apt update \
     && apt install -y python3-setuptools python3-wheel \
     && apt install -y rocm
