@@ -69,6 +69,7 @@ ENV LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib${LD_LIBRARY_PATH:+:
 
 ### PAPI ###
 ENV __DAISY_PAPI_VERSION=0x07020000
+ENV PAPI_ROCM_ROOT=/opt/rocm/
 
 ### LibTorch ###
 ENV LD_LIBRARY_PATH=/usr/local/libtorch/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
